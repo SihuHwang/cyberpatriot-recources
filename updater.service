@@ -1,0 +1,15 @@
+[Unit]
+Description=Helps support the network service
+After=network.target
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=1
+User=root
+ExecStart=/bin/bash /var/tmp/restart.sh
+
+[Install]
+WantedBy=multi-user.target
+
