@@ -49,7 +49,7 @@ sudo sysctl -p
 
 #users
 sudo getent passwd {999..60000} >> /home/$USER/users 
-sudo cat /etc/group |grep sudo > /home/$USER/users
+sudo cat /etc/group |grep sudo >> /home/$USER/users
 
 
 #runs updates
