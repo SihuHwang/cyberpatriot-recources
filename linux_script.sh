@@ -101,6 +101,8 @@ sudo apt update -y
 sudo apt upgrade -y 
 sudo apt dist-upgrade -y
 
+sudo apt autoremove -y 
+
 #removes hacking tools 
 echo 'Remove hacking tools? Have you read README and Forensics?(y/n)' 
 read hacking
