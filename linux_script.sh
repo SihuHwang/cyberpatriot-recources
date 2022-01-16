@@ -9,11 +9,35 @@ sudo apt install libpam-cracklib -y
 #firewall settings 
 sudo ufw enable 
 sudo ufw logging on 
+sudo ufw deny 1337 
 
 #disabling root account 
 sudo passwd -l root 
 
 sudo mkdir -p /home/$USER/Desktop/backups
+
+#sets /etc/hosts to default 
+sudo cp /etc/hosts /home/$USER/Desktop/backups/hosts
+echo > /etc/hosts
+echo -e "127.0.0.1 localhost\n127.0.1.1 $USER\n::1 ip6-localhost ip6-localhost ip6-loopback\nff02::1 ip6-allnodes\nff02::2 ip6-allrouters" >> /etc/hosts 
+sudo chmod 644 /etc/hosts 
+
+#makes /etc/shadow to correct permissions 
+sudo cp /etc/passwd /home/$USER/Desktop/backups/passwd
+sudo chmod 604 /etc/passwd
+
+#makes /etc/shadow to correct permissions 
+sudo cp /etc/shadow /home/$USER/Desktop/backups/shadow
+sudo chmod 600 /etc/shadow
+
+#makes .bash_history to correct permissions 
+sudo cp .bash_history /home/$USER/Desktop/backups/bash_history 
+sudo chmod 640 .bash_history
+
+#removes all startup scripts 
+sudo cp /etc/rc.local /home/$USER/Desktop/backups/rc.local 
+sudo echo > /etc/rc.local 
+echo 'exit 0' >> /etc/rc.local 
 
 #audit policies
 sudo systemctl enable auditd
@@ -52,8 +76,10 @@ sudo sed -i '$ a net.ipv4.conf.default.secure_redirects=0' /etc/sysctl.conf
 
 sudo sysctl -p
 
+#clears aliases 
+unalias -a 
+
 #users
-sudo cp /etc/passwd /home/$USER/Desktop/backups/passwd
 sudo echo '--USERS FROM /etc/passwd--' >> /home/$USER/users
 eval getent passwd {$(awk '/^UID_MIN/ {print $2}' /etc/login.defs)..$(awk '/^UID_MAX/ {print $2}' /etc/login.defs)} | cut -d: -f1 >> /home/$USER/users
 sudo echo '--USERS DIRECTORIES--' >> /home/$USER/users
@@ -67,12 +93,63 @@ eval getent passwd {$(awk '/^UID_MIN/ {print $2}' /etc/login.defs)..$(awk '/^UID
 users=$'\n' read -d '' -r -a lines < /home/$USER/passwords
 for i in ${lines[@]};
 do 	
-	echo -e "'BoiseBee#1'\n'BoiseBee#1'" |sudo passwd ${lines[${i}]}
+	echo -e "BoiseBee#1\nBoiseBee#1" |sudo passwd ${lines[${i}]}
 done
 
 #runs updates
 sudo apt update -y
 sudo apt upgrade -y 
+sudo apt dist-upgrade -y
+
+#removes hacking tools 
+echo 'Remove hacking tools? Have you read README and Forensics?(y/n)' 
+read hacking
+if [ $hacking == y]; 
+then 
+	sudo apt purge netcat -y 
+	sudo apt purge netcat-openbsd -y 
+	sudo apt purge netcat-traditional -y 
+	sudo apt purge ncat -y 
+	sudo apt purge pnetcat -y 
+	sudo apt purge socat -y 
+	sudo apt purge sock -y 
+        sudo apt purge socket -y 
+	sudo apt purge sbd -y 
+	sudo rm /usr/bin/nc 
+	
+	sudo apt purge john -y 
+	sudo apt purge john-data -y 
+	
+	sudo apt purge hydra -y 
+	sudo apt purge hydra-gtk -y 
+
+	sudo apt purge aircrack-ng -y 
+	
+	sudo apt purge fcrakzip -y 
+	
+	sudo apt purge lcrack -y
+	
+	sudo apt purge ophcrack -y 
+	sudo apt purge ophcrack-cli -y 
+
+	sudo apt purge pdfcrack -y 
+
+	sudo apt purge pyrit -y  
+
+	sudo apt purge rarcrack -y 
+
+	sudo apt purge sipcrack -y 
+
+	sudo apt  purge irpas -y 
+	
+	sudo apt purge zeitgeist-core -y 
+	sudo apt purge zeutgeist-datahub -y 
+	sudo apt purge python-zeitgeist -y  
+	sudo apt purge rhythmbox-plugin-zeitgeist -y 
+	sudo apt purge zeitgeist -y
+else 
+	continue 
+fi 
 
 
 #finds unauthorized programs  
