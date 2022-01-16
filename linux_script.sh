@@ -46,7 +46,7 @@ sudo cp /etc/audit/rules.d/audit.rules /home/$USER/Desktop/backups/audit.rules
 sudo sed -i '$ a -w /etc/shadow -p wa -k shadow_file_change' /etc/audit/rules.d/audit.rules
 sudo sed -i '$ a -w /etc/passwd -p wa -k passwd_file_change' /etc/audit/rules.d/audit.rules
 sudo sed -i '$ a -w /etc/group -p wa -k group_file_change' /etc/audit/rules.d/audit.rules
-sudo sed -i '$ a -w /etc/sudoers -p wa sudoers_file_change' /etc/audit/rules.d/audit.rules
+sudo sed -i '$ a -w /etc/sudoers -p wa -k sudoers_file_change' /etc/audit/rules.d/audit.rules
 sudo service auditd restart 
 
 
