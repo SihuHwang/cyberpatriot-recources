@@ -93,7 +93,7 @@ eval getent passwd {$(awk '/^UID_MIN/ {print $2}' /etc/login.defs)..$(awk '/^UID
 users=$'\n' read -d '' -r -a lines < /home/$USER/passwords
 for i in ${lines[@]};
 do 	
-	echo -e "BoiseBee#1\nBoiseBee#1" |sudo passwd ${lines[${i}]}
+	echo -e "BoiseBee#1\nBoiseBee#1" |sudo passwd $i
 done
 
 #runs updates
