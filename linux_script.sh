@@ -101,58 +101,20 @@ sudo apt update -y
 sudo apt upgrade -y 
 sudo apt dist-upgrade -y
 
-sudo apt autoremove -y 
-
 #removes hacking tools 
+list=(netcat netcat-openbsd netcat-traditional ncat pnetcat socat sock socket sbd john john-data hydra hydra-gtk aircrack-ng fcrakzip lcrack ophcrack ophcrack-cli pdfcrack pyrit rarcrack sipcrack irpas zeitgeist-core zeutgeist-datahub python-zeitgeist rhythmbox-plugin-zeitgeist zeitgeist wireshark)
 echo 'Remove hacking tools? Have you read README and Forensics?(y/n)' 
 read hacking
-if [ $hacking == y]; 
+if [ $hacking == "y" ]
 then 
-	sudo apt purge netcat -y 
-	sudo apt purge netcat-openbsd -y 
-	sudo apt purge netcat-traditional -y 
-	sudo apt purge ncat -y 
-	sudo apt purge pnetcat -y 
-	sudo apt purge socat -y 
-	sudo apt purge sock -y 
-        sudo apt purge socket -y 
-	sudo apt purge sbd -y 
-	sudo rm /usr/bin/nc 
+	for name in ${list[@]};
+	do 	
+		sudo apt purge $name -y 
+	done
 	
-	sudo apt purge john -y 
-	sudo apt purge john-data -y 
-	
-	sudo apt purge hydra -y 
-	sudo apt purge hydra-gtk -y 
-
-	sudo apt purge aircrack-ng -y 
-	
-	sudo apt purge fcrakzip -y 
-	
-	sudo apt purge lcrack -y
-	
-	sudo apt purge ophcrack -y 
-	sudo apt purge ophcrack-cli -y 
-
-	sudo apt purge pdfcrack -y 
-
-	sudo apt purge pyrit -y  
-
-	sudo apt purge rarcrack -y 
-
-	sudo apt purge sipcrack -y 
-
-	sudo apt  purge irpas -y 
-	
-	sudo apt purge zeitgeist-core -y 
-	sudo apt purge zeutgeist-datahub -y 
-	sudo apt purge python-zeitgeist -y  
-	sudo apt purge rhythmbox-plugin-zeitgeist -y 
-	sudo apt purge zeitgeist -y
-else 
-	continue 
+	sudo rm /usr/bin/nc  
 fi 
-
+sudo apt autoremove -y 
 
 #finds unauthorized programs  
 sudo find / -type f \( -iname  "*.mp3" -o -iname "nc*" -o -iname "nmap*" -o -iname "*shark" -o -iname "*netcat*" -o -iname "*.pl" -o -iname "*ghidra*" \) >> /home/$USER/prohibited_files
