@@ -25,10 +25,12 @@ sudo chmod 644 /etc/hosts
 
 #makes /etc/shadow to correct permissions 
 sudo cp /etc/passwd /home/$USER/Desktop/backups/passwd
+sudo chown -R root:root /etc/passwd
 sudo chmod 604 /etc/passwd
 
 #makes /etc/shadow to correct permissions 
 sudo cp /etc/shadow /home/$USER/Desktop/backups/shadow
+sudo chown -R root:root /etc/shadow
 sudo chmod 600 /etc/shadow
 
 #makes .bash_history to correct permissions 
@@ -97,14 +99,15 @@ do
 	echo -e "BoiseBee#1\nBoiseBee#1" |sudo passwd $i
 done
 
-#runs updates
-sudo apt update -y
-sudo apt upgrade -y 
-sudo apt dist-upgrade -y
+#misc. 
+sudo apt update openssl libssl-dev 
+sudo apt-cache policy openssl libssl-dev
+
+
 
 #removes hacking tools 
 list=(netcat netcat-openbsd netcat-traditional ncat pnetcat socat sock socket sbd john john-data hydra hydra-gtk aircrack-ng fcrakzip lcrack ophcrack ophcrack-cli pdfcrack pyrit rarcrack sipcrack irpas zeitgeist-core zeutgeist-datahub python-zeitgeist rhythmbox-plugin-zeitgeist zeitgeist wireshark)
-echo 'Remove hacking tools? Have you read README and Forensics?(y/n)' 
+echo 'Remove hacking tools and files? Have you read README and Forensics?(y/n)' 
 read hacking
 if [ $hacking == "y" ]
 then 
@@ -114,8 +117,16 @@ then
 	done
 	
 	sudo rm /usr/bin/nc  
+	sudo find /bin/ -name "*.sh" -type f -delete
 fi 
+
+
 sudo apt autoremove -y 
+
+#runs updates
+sudo apt update -y
+sudo apt upgrade -y 
+sudo apt dist-upgrade -y
 
 #finds unauthorized programs  
 sudo find / -type f \( -iname  "*.mp3" -o -iname "nc*" -o -iname "nmap*" -o -iname "*shark" -o -iname "*netcat*" -o -iname "*.pl" -o -iname "*ghidra*" \) >> /home/$USER/prohibited_files
