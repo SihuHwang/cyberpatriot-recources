@@ -13,6 +13,7 @@ sudo ufw deny 1337
 
 #disabling root account 
 sudo passwd -l root 
+sudo usermod -L root
 
 sudo mkdir -p /home/$USER/Desktop/backups
 
