@@ -99,7 +99,23 @@ do
 	echo -e "BoiseBee#1\nBoiseBee#1" |sudo passwd $i
 done
 
+
+
+#clears crontab 
+crontab -l > /home/$USER/Desktop/backups/user_crontab 
+crontab -r 
+sudo crontab -l > /home/$USER/Desktop/backups/root_crontab
+sudo crontab -r
+cd /etc/ 
+sudo rm -f cron.deny at.deny 
+echo root >cron.allow
+echo root >at.allow
+sudo chown root:root cron.allow at.allow 
+sudo chmod 400 cron.allow at.allow 
+cd ~
+
 #misc. 
+echo "exit 0" > /etc/rc.local
 sudo apt update openssl libssl-dev 
 sudo apt-cache policy openssl libssl-dev
 
