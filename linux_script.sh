@@ -142,7 +142,7 @@ sudo apt upgrade -y
 sudo apt dist-upgrade -y
 
 #finds unauthorized programs  
-sudo find / -type f \( -iname  "*.mp3" -o -iname "nc*" -o -iname "nmap*" -o -iname "*shark" -o -iname "*netcat*" -o -iname "*.pl" -o -iname "*ghidra*" \) >> /home/$USER/prohibited_files
+sudo find / -type f \( -iname  "*.mp3" -o -iname "nc*" -o -iname "nmap*" -o -iname "*shark" -o -iname "*netcat*" -o -iname "*ghidra*" \) >> /home/$USER/prohibited_files
 
 #finds unauthroized files 
 for ext in mp3 txt wav wma aac mp4 mov avi gif jpg png bmp img exe msi bat ogg h264 mpg mpeg
