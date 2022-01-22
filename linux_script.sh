@@ -23,7 +23,7 @@ echo > /etc/hosts
 echo -e "127.0.0.1 localhost\n127.0.1.1 $USER\n::1 ip6-localhost ip6-localhost ip6-loopback\nff02::1 ip6-allnodes\nff02::2 ip6-allrouters" >> /etc/hosts 
 sudo chmod 644 /etc/hosts 
 
-#makes /etc/shadow to correct permissions 
+#makes /etc/passwd to correct permissions 
 sudo cp /etc/passwd /home/$USER/Desktop/backups/passwd
 sudo chown -R root:root /etc/passwd
 sudo chmod 604 /etc/passwd
@@ -99,21 +99,6 @@ do
 	echo -e "BoiseBee#1\nBoiseBee#1" |sudo passwd $i
 done
 
-
-
-#clears crontab 
-crontab -l > /home/$USER/Desktop/backups/user_crontab 
-crontab -r 
-sudo crontab -l > /home/$USER/Desktop/backups/root_crontab
-sudo crontab -r
-cd /etc/ 
-sudo rm -f cron.deny at.deny 
-echo root >cron.allow
-echo root >at.allow
-sudo chown root:root cron.allow at.allow 
-sudo chmod 400 cron.allow at.allow 
-cd ~
-
 #misc. 
 echo "exit 0" > /etc/rc.local
 sudo apt update openssl libssl-dev 
@@ -123,7 +108,7 @@ sudo apt-cache policy openssl libssl-dev
 
 #removes hacking tools 
 list=(netcat netcat-openbsd netcat-traditional ncat pnetcat socat sock socket sbd john john-data hydra hydra-gtk aircrack-ng fcrakzip lcrack ophcrack ophcrack-cli pdfcrack pyrit rarcrack sipcrack irpas zeitgeist-core zeutgeist-datahub python-zeitgeist rhythmbox-plugin-zeitgeist zeitgeist wireshark)
-echo 'Remove hacking tools and files? Have you read README and Forensics?(y/n)' 
+echo 'Remove hacking tools,files and crontab? Have you read README and Forensics?(y/n)' 
 read hacking
 if [ $hacking == "y" ]
 then 
@@ -134,6 +119,18 @@ then
 	
 	sudo rm /usr/bin/nc  
 	sudo find /bin/ -name "*.sh" -type f -delete
+	#clears crontab 
+	crontab -l > /home/$USER/Desktop/backups/user_crontab 
+	crontab -r 
+	sudo crontab -l > /home/$USER/Desktop/backups/root_crontab
+	sudo crontab -r
+	cd /etc/ 
+	sudo rm -f cron.deny at.deny 
+	echo root >cron.allow
+	echo root >at.allow
+	sudo chown root:root cron.allow at.allow 
+	sudo chmod 400 cron.allow at.allow 
+	cd ~
 fi 
 
 
