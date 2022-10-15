@@ -116,10 +116,10 @@ then
 	do 	
 		sudo apt purge $name -y 
 	done
-com
 
 	sudo rm /usr/bin/nc  
 	sudo find /bin/ -name "*.sh" -type f -delete
+com
 	#clears crontab 
 	crontab -l > /home/$USER/Desktop/backups/user_crontab 
 	crontab -r 
