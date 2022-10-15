@@ -105,7 +105,7 @@ sudo apt update openssl libssl-dev
 sudo apt-cache policy openssl libssl-dev
 
 
-
+<<com
 #removes hacking tools 
 list=(netcat netcat-openbsd netcat-traditional ncat pnetcat socat sock socket sbd john john-data hydra hydra-gtk aircrack-ng fcrakzip lcrack ophcrack ophcrack-cli pdfcrack pyrit rarcrack sipcrack irpas zeitgeist-core zeutgeist-datahub python-zeitgeist rhythmbox-plugin-zeitgeist zeitgeist wireshark)
 echo 'Remove hacking tools,files and crontab? Have you read README and Forensics?(y/n)' 
@@ -116,7 +116,8 @@ then
 	do 	
 		sudo apt purge $name -y 
 	done
-	
+com
+
 	sudo rm /usr/bin/nc  
 	sudo find /bin/ -name "*.sh" -type f -delete
 	#clears crontab 

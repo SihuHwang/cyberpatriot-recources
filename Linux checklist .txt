@@ -1,0 +1,48 @@
+1. Read the README. Take note of the README of critical services and software. 
+2. Ensure that sudo is working. 
+	"sudo cat /etc/sudoers". "sudo visudo" to edit. Also check the /etc/sudoers.d directory
+3.Run Script. While script is running work on forensics.
+4. Take note and write down any red flags you notice!
+5. Firefox settings
+	UNDER GENERAL
+	Set as default browser
+	Set to automatically install updates 
+	UNDER PRIVACY & SECUIRTY 
+	Set to Strict 
+	Send websites a "Do Not Track" to always 
+	Delete coookies 
+	Block pop-ups 
+	Warn you when websites try to install add-ons
+	Block dangerous and deceptive content 
+	Enable HTTPS-Only Mode in all windows
+6. Remove all unauthorized users and check for hidden users. 
+	sudo deluser --remove-home --remove-all-files
+7. Remove all unauthorized users from sudo 
+	sudo deluser (username) sudo 
+	sudo gpasswd -d (username) sudo 
+8. Make netstat look clean
+	Do a ps -aux on all pids to make sure they are legit!
+	service --status-all 
+	systemctl list-units --type=service --state=running
+9. Check ifconfig or ip addr to have no additional interfaces
+10. Configure whatever the required service is to make it secure
+
+
+
+
+			---POSSIBLE HELPFUL COMMANDS---
+which [filename] shows the directory the command/program is being ran from. 
+lsattr [filename/directory] shows the attribute of a file or directory that could prevent you from deleting a file. 
+chattr [filename/directory] changes attributes of a file or directory
+chown (username):(username) [filename] takes ownership of a file
+chgrp [group] [directory] changes group access to a file or directory
+lsof [option][username/program] shows the files currently opened by a user or program 
+	[-u for user][-c for program] 
+md5/sha256sum [filename] finds the hash of a file
+echo <text string> | base64 -d decodes a text in base64
+file [filename] Shows the actual type of a file.
+last [-10] [username] gives informoation about last users who logged in
+top Shows the linux proccesses currently running 
+tree Recursively displays the content of a directory
+sudo apt list --installed Shows a list of installed programs 
+lsb_release -a shows the current OS version 
