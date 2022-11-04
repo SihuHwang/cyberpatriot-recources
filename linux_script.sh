@@ -111,7 +111,7 @@ list=(netcat netcat-openbsd netcat-traditional ncat pnetcat socat sock socket sb
 echo 'Remove hacking tools,files and crontab? Have you read README and Forensics?(y/n)' 
 read hacking
 if [ $hacking == "y" ]
-then 
+then
 	for name in ${list[@]};
 	do 	
 		sudo apt purge $name -y 
@@ -135,13 +135,6 @@ com
 fi 
 
 
-sudo apt autoremove -y 
-
-#runs updates
-sudo apt update -y
-sudo apt upgrade -y 
-sudo apt dist-upgrade -y
-
 #finds unauthorized programs  
 sudo find / -type f \( -iname  "*.mp3" -o -iname "nc*" -o -iname "nmap*" -o -iname "*shark" -o -iname "*netcat*" -o -iname "*ghidra*" \) >> /home/$USER/prohibited_files
 
@@ -150,4 +143,16 @@ for ext in mp3 txt wav wma aac mp4 mov avi gif jpg png bmp img exe msi bat ogg h
 	do 
 		sudo find /home -iname *.$ext >> /home/$USER/unauthroized_files
 	done 
-exit 
+
+echo "Start Updates?(y/n) Remove Unauthorized programs First to save time!"
+read update 
+if [ $update ==  "y"]
+then 
+	sudo apt autoremove -y 
+
+	#runs updates
+	sudo apt update -y
+	sudo apt upgrade -y 
+	sudo apt dist-upgrade -y
+fi
+exit
