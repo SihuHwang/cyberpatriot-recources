@@ -83,20 +83,29 @@ sudo sysctl -p
 unalias -a 
 
 #users
-sudo echo '--USERS FROM /etc/passwd--' >> /home/$USER/users
-eval getent passwd {$(awk '/^UID_MIN/ {print $2}' /etc/login.defs)..$(awk '/^UID_MAX/ {print $2}' /etc/login.defs)} | cut -d: -f1 >> /home/$USER/users
-sudo echo '--USERS DIRECTORIES--' >> /home/$USER/users
-ls /home >> /home/$USER/users
-sudo cp /etc/group /home/$USER/Desktop/backups/sudo 
-sudo echo '--SUDO USERS--' >> /home/$USER/users
-sudo cat /etc/group |grep sudo >> /home/$USER/users 
+echo "Did you enter users from README as /home/$USER/Desktop/READMEusers.txt?(y/n)" 
+read users 
+if [users == 'y']
+then	
+	sort /home/$USER/Desktop/READMEusers.txt 
+	sudo echo '--USERS FROM /etc/passwd--' >> /home/$USER/users
+	eval getent passwd {$(awk '/^UID_MIN/ {print $2}' /etc/login.defs)..$(awk '/^UID_MAX/ {print $2}' /etc/login.defs)} | cut -d: -f1 >> /home/$USER/users
+	sudo echo '--USERS DIRECTORIES--' >> /home/$USER/users
+	ls /home >> /home/$USER/users
+	sudo cp /etc/group /home/$USER/Desktop/backups/sudo 
+	sudo echo '--SUDO USERS--' >> /home/$USER/users
+	sudo cat /etc/group |grep sudo >> /home/$USER/users 
+	
+fi
 
 #passwords
 eval getent passwd {$(awk '/^UID_MIN/ {print $2}' /etc/login.defs)..$(awk '/^UID_MAX/ {print $2}' /etc/login.defs)} | cut -d: -f1 > /home/$USER/passwords
 users=$'\n' read -d '' -r -a lines < /home/$USER/passwords
 for i in ${lines[@]};
-do 	
+if [ i != $USER] 
+then 	
 	echo -e "BoiseBee#1\nBoiseBee#1" |sudo passwd $i
+fi 
 done
 
 #misc. 
@@ -114,25 +123,29 @@ if [ $hacking == "y" ]
 then
 	for name in ${list[@]};
 	do 	
-		sudo apt purge $name -y 
+		sudo apt remove $name 
 	done
 
 	sudo rm /usr/bin/nc  
 	sudo find /bin/ -name "*.sh" -type f -delete
+	
+fi
 com
-	#clears crontab 
-	crontab -l > /home/$USER/Desktop/backups/user_crontab 
-	crontab -r 
-	sudo crontab -l > /home/$USER/Desktop/backups/root_crontab
-	sudo crontab -r
-	cd /etc/ 
-	sudo rm -f cron.deny at.deny 
-	echo root >cron.allow
-	echo root >at.allow
-	sudo chown root:root cron.allow at.allow 
-	sudo chmod 400 cron.allow at.allow 
-	cd ~
-fi 
+
+
+#clears crontab 
+crontab -l > /home/$USER/Desktop/backups/user_crontab 
+crontab -r 
+sudo crontab -l > /home/$USER/Desktop/backups/root_crontab
+sudo crontab -r
+cd /etc/ 
+sudo rm -f cron.deny at.deny 
+echo root >cron.allow
+echo root >at.allow
+sudo chown root:root cron.allow at.allow 
+sudo chmod 400 cron.allow at.allow 
+cd ~
+
 
 
 #finds unauthorized programs  
