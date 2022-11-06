@@ -83,7 +83,7 @@ sudo sysctl -p
 unalias -a 
 
 #users
-echo "Did you enter users from README as /home/$USER/Desktop/READMEusers.txt?(y/n)" 
+echo "Did you enter users from README as /home/$USER/Desktop/READMEusers?(y/n)" 
 read README
 
 
