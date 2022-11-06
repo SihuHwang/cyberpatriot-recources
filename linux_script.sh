@@ -1,24 +1,25 @@
-#!/bin/bash																   
-#installation of programs 
+#!/bin/bash
+#installation of programs
+
 sudo apt install ufw -y
-sudo apt install net-tools -y 
-sudo apt install auditd audispd-plugins -y 
-sudo apt install libpam-cracklib -y 
+sudo apt install auditd audispd-plugins -y     
+sudo apt install libpam-cracklib -y
+
 
 #firewall settings 
-sudo ufw enable 
-sudo ufw logging on 
-sudo ufw deny 1337 
+sudo ufw enable
+sudo ufw logging on
+sudo ufw deny 1337
 
 #disabling root account 
-sudo passwd -l root 
+sudo passwd -l root
 sudo usermod -L root
 
 sudo mkdir -p /home/$USER/Desktop/backups
 
-#sets /etc/hosts to default 
+#sets /etc/hosts to default
 sudo cp /etc/hosts /home/$USER/Desktop/backups/hosts
-echo > /etc/hosts
+sudo printf > /etc/hosts
 echo -e "127.0.0.1 localhost\n127.0.1.1 $USER\n::1 ip6-localhost ip6-localhost ip6-loopback\nff02::1 ip6-allnodes\nff02::2 ip6-allrouters" >> /etc/hosts 
 sudo chmod 644 /etc/hosts 
 
@@ -83,34 +84,44 @@ unalias -a
 
 #users
 echo "Did you enter users from README as /home/$USER/Desktop/READMEusers.txt?(y/n)" 
-read users 
-if [users == 'y']
+read README
+
+
+if [ $README = "y" ];
 then	
-	sort /home/$USER/Desktop/READMEusers.txt 
-	sudo echo '--USERS FROM /etc/passwd--' >> /home/$USER/users
-	eval getent passwd {$(awk '/^UID_MIN/ {print $2}' /etc/login.defs)..$(awk '/^UID_MAX/ {print $2}' /etc/login.defs)} | cut -d: -f1 >> /home/$USER/users
-	sudo echo '--USERS DIRECTORIES--' >> /home/$USER/users
-	ls /home >> /home/$USER/users
-	sudo cp /etc/group /home/$USER/Desktop/backups/sudo 
-	sudo echo '--SUDO USERS--' >> /home/$USER/users
-	sudo cat /etc/group |grep sudo >> /home/$USER/users 
-	
+	cat /home/$USER/Desktop/READMEusers | sort > readme
+	sudo rm /home/$USER/Desktop/READMEusers
+	awk -F: '($3 >= 1000 && $3 <= 60000) {printf $1"\n"}' /etc/passwd | sort >> /home/$USER/Desktop/users
+	diff -y readme users
+	echo "DELETE ALL UNAUTHORIZED USERS IN A NEW TERMINAL AND CHECK SUDO" 
+
 fi
 
-#passwords
-eval getent passwd {$(awk '/^UID_MIN/ {print $2}' /etc/login.defs)..$(awk '/^UID_MAX/ {print $2}' /etc/login.defs)} | cut -d: -f1 > /home/$USER/passwords
-users=$'\n' read -d '' -r -a lines < /home/$USER/passwords
-for i in ${lines[@]};
-if [ i != $USER] 
-then 	
-	echo -e "BoiseBee#1\nBoiseBee#1" |sudo passwd $i
+echo "Finished? (y/n)" 
+read result 
+if [ $result = 'y' ]
+ continue 
 fi 
-done
+
+#passwords
+awk -F: '($3 >= 1000 && $3 <= 60000) {printf $1"\n"}' /etc/passwd | sort > /home/$USER/Desktop/passwords
+filename=/home/$USER/Desktop/passwords
+n=1 
+while read line; do 
+if [ $line != $USER ]
+then 
+	 echo -e "BoiseBee#1\nBoiseBee#1" |sudo passwd $line
+else 
+	continue
+fi
+n=$((n+1))
+done < $filename
 
 #misc. 
 echo "exit 0" > /etc/rc.local
 sudo apt update openssl libssl-dev 
 sudo apt-cache policy openssl libssl-dev
+
 
 
 <<com
@@ -125,13 +136,13 @@ then
 		sudo apt remove $name 
 	done
 
-	sudo rm /usr/bin/nc  
-	sudo find /bin/ -name "*.sh" -type f -delete
+
 	
 fi
 com
 
-
+sudo rm /usr/bin/nc  
+sudo find /bin/ -name "*.sh" -type f -delete
 #clears crontab 
 crontab -l > /home/$USER/Desktop/backups/user_crontab 
 crontab -r 
@@ -156,9 +167,9 @@ for ext in mp3 txt wav wma aac mp4 mov avi gif jpg png bmp img exe msi bat ogg h
 		sudo find /home -iname *.$ext >> /home/$USER/unauthroized_files
 	done 
 
-echo "Start Updates?(y/n) Remove Unauthorized programs First to save time!"
+echo "Start Updates?(y/n) Remove Unauthorized programs first to save time!"
 read update 
-if [ $update ==  "y"]
+if [ $update = "y"]
 then 
 	sudo apt autoremove -y 
 
